@@ -18,7 +18,7 @@ public class DBUtils {
 
 	private static final Logger LOGGER = LogManager.getLogger();
 
-	private final String DB_URL;
+	private String DB_URL;
 
 	private final String DB_USER;
 
@@ -38,6 +38,7 @@ public class DBUtils {
 
 	public DBUtils() {
 		this("src/main/resources/db.properties");
+		//init("src/main/resources/db.properties");
 	}
 
 	public int init(String... paths) {
