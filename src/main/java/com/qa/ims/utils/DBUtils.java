@@ -38,7 +38,7 @@ public class DBUtils {
 
 	public DBUtils() {
 		this("src/main/resources/db.properties");
-		//init("src/main/resources/db.properties");
+		
 	}
 
 	public int init(String... paths) {

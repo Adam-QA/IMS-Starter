@@ -1,10 +1,25 @@
 drop schema ims;
 CREATE SCHEMA IF NOT EXISTS `ims`;
 USE `ims` ;
-CREATE TABLE IF NOT EXISTS `ims`.`customers` (
+CREATE TABLE IF NOT EXISTS `customers` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
-    `first_name` VARCHAR(40) NULL DEFAULT NULL,
-    `surname` VARCHAR(40) NULL DEFAULT NULL,
+    `first_name` VARCHAR(40) DEFAULT NULL,
+    `surname` VARCHAR(40) DEFAULT NULL,
     PRIMARY KEY (`id`)
 );
 
+CREATE TABLE IF NOT EXISTS `items` (
+	`pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	`item_name` VARCHAR(40),
+	`price` DOUBLE(11, 2)
+);
+
+CREATE TABLE IF NOT EXISTS `orders`(
+	`order_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`fk_cid` INT(11) NOT NULL,
+	`fk_pid` INT(11) NOT NULL,
+	`Date_order_placed` date NOT NULL,
+	PRIMARY KEY (`order_id`),
+	FOREIGN KEY (`fk_cid`) REFERENCES `customers` (`id`),
+	FOREIGN KEY (`fk_pid`) REFERENCES `items` (`pid`)
+);
