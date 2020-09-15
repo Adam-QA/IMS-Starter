@@ -51,7 +51,7 @@ public class OrderDAO implements Dao<Order> {
 	public Order readLatest() {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("SELECT * FROM orders ORDER BY id DESC LIMIT 1");) {
+				ResultSet resultSet = statement.executeQuery("SELECT * FROM orders ORDER BY order_id DESC LIMIT 1");) {
 			resultSet.next();
 			return modelFromResultSet(resultSet);
 		} catch (Exception e) {
@@ -70,8 +70,8 @@ public class OrderDAO implements Dao<Order> {
 	public Order create(Order order) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();) {
-			statement.executeUpdate("INSERT INTO orders(fk_cid, fk_pid, Date_order_placed) values('" + order.getFkcid()
-					+ "','" + order.getFkpid() + "','" + order.getDOP() + "')");
+			statement.executeUpdate("INSERT INTO orders(`fk_cid`, `fk_pid`, `Date_order_placed`) values(" + order.getFkcid()
+					+ "," + order.getFkpid() + ",'" + order.getDOP() + "')");
 			return readLatest();
 		} catch (Exception e) {
 			LOGGER.debug(e);
@@ -130,5 +130,7 @@ public class OrderDAO implements Dao<Order> {
 		}
 		return 0;
 	}
+	
+	
 
 }

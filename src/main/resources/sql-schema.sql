@@ -23,3 +23,14 @@ CREATE TABLE IF NOT EXISTS `orders`(
 	FOREIGN KEY (`fk_cid`) REFERENCES `customers` (`id`),
 	FOREIGN KEY (`fk_pid`) REFERENCES `items` (`pid`)
 );
+CREATE TABLE IF NOT EXISTS `orderline`(
+	`orderl_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`order_id` INT(11) NOT NULL,
+	`fk_pid` INT(11) NOT NULL,
+	`Quantity` INT(11) NOT NULL,
+	PRIMARY KEY (`orderl_id`),
+	FOREIGN KEY (`order_id`) REFERENCES `orders`(`order_id`),
+	FOREIGN KEY (`fk_pid`) REFERENCES `items` (`pid`)
+
+
+);

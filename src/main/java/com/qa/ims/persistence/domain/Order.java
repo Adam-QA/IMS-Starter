@@ -13,7 +13,7 @@ public class Order {
 		this.setFkpid(fkpid);
 	}
 
-	public Order(Long fkpid, Long fkcid, String DOP) {
+	public Order(Long fkcid, Long fkpid, String DOP) {
 		this.setFkpid(fkpid);
 		this.setFkcid(fkcid);
 		this.setDOP(DOP);
@@ -46,7 +46,7 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Order [orderid=" + orderid + ", fkcid=" + fkcid + ", fkpid=" + fkpid + ", DOP=" + DOP + "]";
+		return "Order [Order Id = " + orderid + ", Customer Id = " + fkcid + ", Product Id = " + fkpid + ", Date Of Purchase = " + DOP + "]";
 	}
 
 	@Override
