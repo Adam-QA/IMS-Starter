@@ -25,6 +25,16 @@ public class OrderDAO implements Dao<Order> {
 		String dop = resultSet.getString("date_order_placed");
 		return new Order(orderid, fkcid, fkpid, dop);
 	}
+	public Order modelone(ResultSet resultSet) throws SQLException {
+		Long orderlid = resultSet.getLong("orderl_id");
+		Long orderid = resultSet.getLong("order_id");
+		String customername = resultSet.getString("customer");
+		String itemname = resultSet.getString("item_name");
+		Double price = resultSet.getDouble("price");
+		Double total = resultSet.getDouble("orderl_id");
+		String DOP = resultSet.getString("orderl_id");
+		return new Order(orderlid, orderid, customername, itemname, price, total, DOP);
+	}
 
 	/**
 	 * Reads all customers from the database
@@ -129,6 +139,18 @@ public class OrderDAO implements Dao<Order> {
 			LOGGER.error(e.getMessage());
 		}
 		return 0;
+	}
+	public int delete(Long oid, Long pid) {
+		try (Connection connection = DBUtils.getInstance().getConnection();
+	             Statement statement = connection.createStatement();) {
+	            return statement.executeUpdate("delete from orderline where order_id in (select order_id from orders where order_id = "+ oid +
+	                    " and fk_pid = "+pid+ ")");
+	        } catch (Exception e) {
+	            LOGGER.debug(e);
+	            LOGGER.error(e.getMessage());
+	        }
+	        return 0;
+		
 	}
 	
 	

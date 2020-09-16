@@ -61,13 +61,27 @@ public class OrderController implements CrudController<Order> {
 	 */
 	@Override
 	public Order update() {
-		LOGGER.info("Please enter the Order id");
+		LOGGER.info("Please enter the new Order id");
 		Long orderid = utils.getLong();
-		LOGGER.info("Please enter the Customer Id");
+		LOGGER.info("Please enter the new Customer Id");
 		Long fkcid = utils.getLong();
-		LOGGER.info("Please enter the Product Id");
+		LOGGER.info("Please enter the new Product Id");
 		Long fkpid = utils.getLong();
-		LOGGER.info("Please enter the date of your purchase");
+		LOGGER.info("Please enter the new date of your purchase");
+		String DOB = utils.getString();
+		Order order = orderDAO.update(new Order(orderid, fkcid, fkpid, DOB));
+		LOGGER.info("Order Updated");
+		return order;
+	}
+	
+	public Order add() {
+		LOGGER.info("Please enter the new Order id");
+		Long orderid = utils.getLong();
+		LOGGER.info("Please enter the new Customer Id");
+		Long fkcid = utils.getLong();
+		LOGGER.info("Please enter the new Product Id");
+		Long fkpid = utils.getLong();
+		LOGGER.info("Please enter the new date of your purchase");
 		String DOB = utils.getString();
 		Order order = orderDAO.update(new Order(orderid, fkcid, fkpid, DOB));
 		LOGGER.info("Order Updated");
@@ -81,9 +95,26 @@ public class OrderController implements CrudController<Order> {
 	 */
 	@Override
 	public int delete() {
-		LOGGER.info("Please enter the order id of the order you would like to delete");
-		Long orderid = utils.getLong();
-		return orderDAO.delete(orderid);
+		LOGGER.info("Please select what you would like to delete, an order or an item?");
+		String answer = utils.getString();
+		switch(answer) {
+		case "order":
+			LOGGER.info("Please enter the order id of the order you would like to delete");
+			Long orderid = utils.getLong();
+			return orderDAO.delete(orderid);
+		case "item":
+			LOGGER.info("Please enter your order ID");
+			Long oid = utils.getLong();
+			LOGGER.info("Please enter the product ID of the item you wish to delete");
+			Long pid = utils.getLong();
+			return orderDAO.delete(oid,pid);
+		default:
+			LOGGER.info("Invalid input");
+			break;
+		}
+		return 0;
+		
+		
 	}
 
 }

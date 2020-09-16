@@ -8,4 +8,5 @@ INSERT INTO `ims`.`orders`(`fk_cid`, `fk_pid`, `date_order_placed`) VALUES (2, 2
 INSERT INTO `ims`.`orders`(`fk_cid`, `fk_pid`, `date_order_placed`) VALUES (1, 2, '2020-05-06');
 INSERT INTO `ims`.`orders`(`fk_cid`, `fk_pid`, `date_order_placed`) VALUES (2, 1, '2020-05-08');
 
-INSERT INTO `ims`.`orderline`(`order_id`, `fk_pid`, `quantity`) VALUES (1, 2, 3);
+INSERT INTO `ims`.`orderline` (`order_id`, `fk_pid`) VALUES(1, 1);
+INSERT INTO `ims`.`orderline` (`order_id`, `fk_pid`) VALUES(2, 2);

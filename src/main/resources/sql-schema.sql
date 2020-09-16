@@ -27,10 +27,9 @@ CREATE TABLE IF NOT EXISTS `orderline`(
 	`orderl_id` INT(11) NOT NULL AUTO_INCREMENT,
 	`order_id` INT(11) NOT NULL,
 	`fk_pid` INT(11) NOT NULL,
-	`Quantity` INT(11) NOT NULL,
 	PRIMARY KEY (`orderl_id`),
-	FOREIGN KEY (`order_id`) REFERENCES `orders`(`order_id`),
-	FOREIGN KEY (`fk_pid`) REFERENCES `items` (`pid`)
+	CONSTRAINT `fk_orderline_1` FOREIGN KEY (`order_id`) REFERENCES `orders`(`order_id`) on delete cascade,
+	CONSTRAINT `fk_orderline_2` FOREIGN KEY (`fk_pid`) REFERENCES `items` (`pid`)
 
 
 );
