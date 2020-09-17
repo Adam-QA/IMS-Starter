@@ -31,6 +31,7 @@ public class CustomerDAOTest {
 	public void testReadAll() {
 		List<Customer> expected = new ArrayList<>();
 		expected.add(new Customer(1L, "jordan", "harrison"));
+		expected.add(new Customer(2L, "Adam", "Stevenson"));
 		assertEquals(expected, DAO.readAll());
 	}
 
