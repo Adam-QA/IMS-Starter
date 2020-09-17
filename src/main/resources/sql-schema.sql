@@ -17,11 +17,8 @@ CREATE TABLE IF NOT EXISTS `items` (
 CREATE TABLE IF NOT EXISTS `orders`(
 	`order_id` INT(11) NOT NULL AUTO_INCREMENT,
 	`fk_cid` INT(11) NOT NULL,
-	`fk_pid` INT(11) NOT NULL,
-	`Date_order_placed` date NOT NULL,
 	PRIMARY KEY (`order_id`),
-	FOREIGN KEY (`fk_cid`) REFERENCES `customers` (`id`),
-	FOREIGN KEY (`fk_pid`) REFERENCES `items` (`pid`)
+	FOREIGN KEY (`fk_cid`) REFERENCES `customers` (`id`)
 );
 CREATE TABLE IF NOT EXISTS `orderline`(
 	`orderl_id` INT(11) NOT NULL AUTO_INCREMENT,

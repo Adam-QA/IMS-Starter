@@ -1,39 +1,64 @@
 package com.qa.ims.persistence.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.qa.ims.persistence.domain.Customer;
+import com.qa.ims.persistence.domain.Item;
 import com.qa.ims.persistence.domain.Order;
 import com.qa.ims.utils.DBUtils;
 
 public class OrderDAO implements Dao<Order> {
 
 	public static final Logger LOGGER = LogManager.getLogger();
+	private CustomerDAO customerDao;
+	private ItemDAO itemDao;
+	
+	public OrderDAO(CustomerDAO customerDao, ItemDAO itemDao) {
+		super();
+		this.customerDao = customerDao;
+		this.itemDao = itemDao;
+	}
 
 	@Override
 	public Order modelFromResultSet(ResultSet resultSet) throws SQLException {
 		Long orderid = resultSet.getLong("order_id");
-		Long fkcid = resultSet.getLong("fk_cid");
-		Long fkpid = resultSet.getLong("fk_pid");
-		String dop = resultSet.getString("date_order_placed");
-		return new Order(orderid, fkcid, fkpid, dop);
+		Customer customer = customerDao.readCustomer(resultSet.getLong("fk_cid"));
+		List<Item> items = getItems(orderid);
+		return new Order(orderid, customer, items);
 	}
-	public Order modelone(ResultSet resultSet) throws SQLException {
-		Long orderlid = resultSet.getLong("orderl_id");
+
+	public Order modelOne(ResultSet resultSet) throws SQLException {
 		Long orderid = resultSet.getLong("order_id");
-		String customername = resultSet.getString("customer");
-		String itemname = resultSet.getString("item_name");
+		String customer = resultSet.getString("Customer Name");
+		//Item itemsId = itemDao.readItem(resultSet.getLong("fk_pid"));
+		String item = resultSet.getString("item_name");
 		Double price = resultSet.getDouble("price");
-		Double total = resultSet.getDouble("orderl_id");
-		String DOP = resultSet.getString("orderl_id");
-		return new Order(orderlid, orderid, customername, itemname, price, total, DOP);
+		return new Order(orderid, customer, item, price);
+	}
+
+	private List<Item> getItems(Long orderid) {
+		List<Long> itemIds = new ArrayList<>();
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery("select * from orders, orderline where orders.order_id =" + orderid + " orderline.order_id=" + orderid);){
+			while (resultSet.next()) {
+				itemIds.add(resultSet.getLong("fk_pid"));
+			}
+		} catch(SQLException e) {
+			LOGGER.debug(e);
+			LOGGER.debug(e.getMessage());
+		}
+		return itemIds.stream().map(this.itemDao::readItem).collect(Collectors.toList());
 	}
 
 	/**
@@ -45,10 +70,12 @@ public class OrderDAO implements Dao<Order> {
 	public List<Order> readAll() {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("select * from orders");) {
+				ResultSet resultSet = statement.executeQuery("select orders.order_id, concat(customers.first_name, \" \", customers.surname) as \"Customer Name\", "
+						+ "items.item_name, items.price from orders, orderline, items, customers where orders.order_id = "
+						+ "orderline.order_id and orderline.fk_pid= items.pid and orders.fk_cid = customers.id;");) {
 			List<Order> orders = new ArrayList<>();
 			while (resultSet.next()) {
-				orders.add(modelFromResultSet(resultSet));
+				orders.add(modelOne(resultSet));
 			}
 			return orders;
 		} catch (SQLException e) {
@@ -80,8 +107,20 @@ public class OrderDAO implements Dao<Order> {
 	public Order create(Order order) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();) {
-			statement.executeUpdate("INSERT INTO orders(`fk_cid`, `fk_pid`, `Date_order_placed`) values(" + order.getFkcid()
-					+ "," + order.getFkpid() + ",'" + order.getDOP() + "')");
+			statement.executeUpdate("INSERT INTO orders(`fk_cid`) values(" + order.getCustomer().getId() + ")");
+			return readLatest();
+		} catch (Exception e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
+		return null;
+	}
+	public Order create(Long oid, Long pid) {
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				PreparedStatement statement = connection.prepareStatement("INSERT INTO orderline (`order_id`, `fk_pid`) VALUES (?, ?)")) {
+			statement.setLong(1,  oid);
+			statement.setLong(2, pid);
+			statement.executeUpdate();
 			return readLatest();
 		} catch (Exception e) {
 			LOGGER.debug(e);
@@ -112,15 +151,15 @@ public class OrderDAO implements Dao<Order> {
 	 */
 	@Override
 	public Order update(Order order) {
-		try (Connection connection = DBUtils.getInstance().getConnection();
-				Statement statement = connection.createStatement();) {
-			statement.executeUpdate("update orders set fk_cid ='" + order.getFkcid() + "', fk_pid ='"
-					+ order.getFkpid() + "' where order_id =" + order.getOrderid());
-			return readOrder(order.getOrderid());
-		} catch (Exception e) {
-			LOGGER.debug(e);
-			LOGGER.error(e.getMessage());
-		}
+//		try (Connection connection = DBUtils.getInstance().getConnection();
+//				Statement statement = connection.createStatement();) {
+//			statement.executeUpdate("update orders set fk_cid ='" + order.getFkcid() + "', fk_pid ='"
+//					+ order.getFkpid() + "' where order_id =" + order.getOrderid());
+//			return readOrder(order.getOrderid());
+//		} catch (Exception e) {
+//			LOGGER.debug(e);
+//			LOGGER.error(e.getMessage());
+//		}
 		return null;
 	}
 
@@ -152,6 +191,7 @@ public class OrderDAO implements Dao<Order> {
 	        return 0;
 		
 	}
+	
 	
 	
 

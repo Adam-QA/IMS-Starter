@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Utils {
 	private static Logger LOGGER = LogManager.getLogger();
-
+	
 	private final Scanner scanner;
 
 	public Utils(Scanner scanner) {

@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 
 
 import com.qa.ims.persistence.dao.OrderDAO;
-
+import com.qa.ims.persistence.domain.Customer;
 import com.qa.ims.persistence.domain.Order;
 import com.qa.ims.utils.Utils;
 
@@ -45,15 +45,30 @@ public class OrderController implements CrudController<Order> {
 	 */
 	@Override
 	public Order create() {
-		LOGGER.info("Please enter the Customer Id");
-		Long fkcid = utils.getLong();
-		LOGGER.info("Please enter the Product Id");
-		Long fkpid = utils.getLong();
-		LOGGER.info("Please enter the date of your purchase");
-		String DOP = utils.getString();
-		Order order = orderDAO.create(new Order(fkcid, fkpid, DOP));
-		LOGGER.info("Order created");
-		return order;
+		LOGGER.info("Would you like to create an order or add to an order");
+		String answer = utils.getString();
+		switch(answer) {
+		case "create":
+			LOGGER.info("Please enter the Customer Id");
+			Long customerId = utils.getLong();
+			Order order = orderDAO.create(new Order(new Customer(customerId, null, null)));
+			LOGGER.info("Order created");
+			return order;
+		case "add":
+			LOGGER.info("Please enter your order ID");
+			Long oid = utils.getLong();
+			LOGGER.info("Please enter the ID of the product you would like to add");
+			Long pid = utils.getLong();
+			Order orderadd = orderDAO.create(oid, pid);
+			LOGGER.info("Item added to order");
+			return orderadd;
+		default:
+			LOGGER.info("Invalid input");
+			break;
+		}
+		return null;
+		
+	
 	}
 
 	/**
@@ -61,32 +76,22 @@ public class OrderController implements CrudController<Order> {
 	 */
 	@Override
 	public Order update() {
-		LOGGER.info("Please enter the new Order id");
-		Long orderid = utils.getLong();
-		LOGGER.info("Please enter the new Customer Id");
-		Long fkcid = utils.getLong();
-		LOGGER.info("Please enter the new Product Id");
-		Long fkpid = utils.getLong();
-		LOGGER.info("Please enter the new date of your purchase");
-		String DOB = utils.getString();
-		Order order = orderDAO.update(new Order(orderid, fkcid, fkpid, DOB));
-		LOGGER.info("Order Updated");
-		return order;
+		//TODO: change this to take in a orderid, then change the customerid of that order and return it
+		// (if you can be bothered - NJ)
+//		LOGGER.info("Please enter the new Order Id");
+//		Long orderid = utils.getLong();
+//		LOGGER.info("Please enter the new Customer Id");
+//		Long fkcid = utils.getLong();
+//		LOGGER.info("Please enter the new Product Id");
+//		Long fkpid = utils.getLong();
+//		LOGGER.info("Please enter the new date of your purchase");
+//		String DOB = utils.getString();
+//		Order order = orderDAO.update(new Order(orderid, fkcid, fkpid, DOB));
+//		LOGGER.info("Order Updated");
+		return null;
 	}
 	
-	public Order add() {
-		LOGGER.info("Please enter the new Order id");
-		Long orderid = utils.getLong();
-		LOGGER.info("Please enter the new Customer Id");
-		Long fkcid = utils.getLong();
-		LOGGER.info("Please enter the new Product Id");
-		Long fkpid = utils.getLong();
-		LOGGER.info("Please enter the new date of your purchase");
-		String DOB = utils.getString();
-		Order order = orderDAO.update(new Order(orderid, fkcid, fkpid, DOB));
-		LOGGER.info("Order Updated");
-		return order;
-	}
+
 
 	/**
 	 * Deletes an existing customer by the id of the customer
