@@ -1,89 +1,34 @@
-Coverage: 34%
-# Project Title
+Coverage: 56%
+IMS Project
 
-One Paragraph of project description goes here
+This is my IMS project that connects a database to my java application and is able to create/update/read/delete the customers, items and orders you put into the system.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+First of all to use this project you can fork it to your local github account and then clone it down to your system. Navigate to the location of the project in your local repository and then in your IDE you can open the file. Make sure to maven update the project and you can then run the project from the runner!
+
+![alt text](https://i.imgur.com/YyK45Sn.png)
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
+You need to install Maven, an IDE, Java and have a local mysql.
 
 ## Running the tests
 
-Explain how to run the automated tests for this system. Break down into which tests and what they do
+The tests I run make sure that the output of certain functions get the right output.
 
 ### Unit Tests 
 
-Explain what these tests test, why and how to run them
+To run the tests, navigate over the test code folder, right click and run as JUnit test.
 
-```
-Give an example
-```
-
-### Integration Tests 
-Explain what these tests test, why and how to run them
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
 
 ## Built With
 
 * [Maven](https://maven.apache.org/) - Dependency Management
 
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning.
 
 ## Authors
 
-* **Chris Perrins** - *Initial work* - [christophperrins](https://github.com/christophperrins)
+Adam Stevenson
 
-## License
 
-This project is licensed under the MIT license - see the [LICENSE.md](LICENSE.md) file for details 
-
-*For help in [Choosing a license](https://choosealicense.com/)*
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
