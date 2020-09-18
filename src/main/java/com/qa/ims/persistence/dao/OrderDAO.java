@@ -29,6 +29,10 @@ public class OrderDAO implements Dao<Order> {
 		this.itemDao = itemDao;
 	}
 
+	public OrderDAO() {
+		
+	}
+
 	@Override
 	public Order modelFromResultSet(ResultSet resultSet) throws SQLException {
 		Long orderid = resultSet.getLong("order_id");
@@ -88,9 +92,11 @@ public class OrderDAO implements Dao<Order> {
 	public Order readLatest() {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("SELECT * FROM orders ORDER BY order_id DESC LIMIT 1");) {
+				ResultSet resultSet = statement.executeQuery("select orders.order_id, concat(customers.first_name, \" \", customers.surname) as \"Customer Name\", "
+						+ "items.item_name, items.price from orders, orderline, items, customers where orders.order_id = "
+						+ "orderline.order_id and orderline.fk_pid= items.pid and orders.fk_cid = customers.id ORDER BY order_id DESC LIMIT 1");) {
 			resultSet.next();
-			return modelFromResultSet(resultSet);
+			return modelOne(resultSet);
 		} catch (Exception e) {
 			LOGGER.debug(e);
 			LOGGER.error(e.getMessage());
