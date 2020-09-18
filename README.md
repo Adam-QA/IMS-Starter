@@ -7,6 +7,8 @@ This is my IMS project that connects a database to my java application and is ab
 
 First of all to use this project you can fork it to your local github account and then clone it down to your system. Navigate to the location of the project in your local repository and then in your IDE you can open the file. Make sure to maven update the project and you can then run the project from the runner!
 
+![alt text](https://imgur.com/YyK45Sn)
+
 ### Prerequisites
 
 You need to install Maven, an IDE, Java and have a local mysql.
